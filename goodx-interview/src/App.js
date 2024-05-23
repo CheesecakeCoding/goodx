@@ -15,7 +15,7 @@ function App() {
   const [seeUpdateCreate, setUpdateCreate] = useState(false); //used to control wether Create/Update/Delete section displays or not
   const [seePage, setPage] = useState("Create New");
   const [preFilled, setPreFilled] = useState(
-    '{"type": "","status": "","time": "","duration": 0, "patient": "","reason": "", "patient_uid":"","d_name":"", "d_uid":""}'
+    '{"type": "","status": "","time": "","duration": 0, "patient": "","reason": "", "patient_uid":"","d_name":"", "d_uid":"", "date":"", "uid":""}'
   );
   const [statuses, setStatuses] = useState(""); //Do this to avoid "undefined errors"
   const [patients, setPatiens] = useState(""); //Do this to avoid "undefined errors"
@@ -53,7 +53,9 @@ function App() {
     reason,
     patient_uid,
     d_name,
-    d_uid
+    d_uid,
+    date,
+    uid
   ) {
     let temp = JSON.parse(preFilled);
     temp.type = type;
@@ -65,6 +67,8 @@ function App() {
     temp.patient_uid = patient_uid;
     temp.d_name = d_name;
     temp.d_uid = d_uid;
+    temp.date = date;
+    temp.uid = uid;
     setPreFilled(JSON.stringify(temp));
   }
   function demoAlert(val) {
@@ -91,6 +95,7 @@ function App() {
   function changeToday(val) {
     setTime(val);
   }
+  // changeToday("2024-05-19");
   return (
     <>
       <div className="container LoginContainer">
@@ -116,7 +121,7 @@ function App() {
           <Bookings
             bookingsView={bookingsView}
             updateCreateView={updateCreateView}
-            dateCheck={today}
+            dateCheck={"2024-05-19"}
             updatePage={updatePage}
             updatePreFilled={updatePreFilled}
             demoAlert={demoAlert}

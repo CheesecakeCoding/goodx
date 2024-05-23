@@ -3,19 +3,20 @@ import React from "react";
 interface DropdownProps {
   data: String;
   dValue: String;
-  idName: String;
+  id: String;
 }
 
-function Dropdown({ data, dValue, idName }: DropdownProps) {
+function Dropdown({ data, dValue, idName, id }: DropdownProps) {
   let obj = JSON.parse(data);
-
   return (
-    <select class="form-select" aria-label="Default select example">
+    <select id={id} class="form-select" value={dValue}>
       <option value="none" selected disabled hidden>
         Select an Option
       </option>
       {obj.map((item) => (
-        <option value={item.uid}>{item.name}</option>
+        <option value={item.uid}>
+          {item.surname ? item.name + " " + item.surname : item.name}
+        </option>
       ))}
     </select>
   );

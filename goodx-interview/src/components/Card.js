@@ -34,6 +34,7 @@ function Card({
 8: uid; 
 9: debtor_name; 
 10:debtor_uid; 
+11: Date
 */
 
   // string into an array for ease of use
@@ -79,7 +80,9 @@ function Card({
                 obj[5],
                 obj[2],
                 obj[0],
-                obj[10]
+                obj[10],
+                obj[11],
+                obj[8]
               ),
               moveToCreate(bookingsView, updateCreateView, updatePage, "Update")
             )}

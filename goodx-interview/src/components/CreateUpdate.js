@@ -26,6 +26,7 @@ function CreateUpdate({
   bType,
 }: CreateUpdateProps) {
   fieldData = JSON.parse(fieldData);
+
   return (
     <div className="container">
       <div className="row vh-100 align-items-center justify-content-center">
@@ -34,6 +35,24 @@ function CreateUpdate({
             <div className="row justify-content-center">
               <div>
                 <h1>{page} booking</h1>
+                {page == "Update" ? (
+                  <div className="d-flex flex-row-reverse p-2">
+                    <Button
+                      color="danger"
+                      onClick={() =>
+                        deleteBooking(
+                          fieldData.uid,
+                          bookingsView,
+                          updateCreateView
+                        )
+                      }
+                    >
+                      DeleteBooking
+                    </Button>
+                  </div>
+                ) : (
+                  <div></div>
+                )}
                 <hr />
               </div>
 
@@ -43,7 +62,11 @@ function CreateUpdate({
                 </div>
 
                 <div className="col">
-                  <Dropdown data={patients}></Dropdown>
+                  <Dropdown
+                    id="patient"
+                    data={patients}
+                    dValue={fieldData.patient_uid}
+                  ></Dropdown>
                 </div>
               </div>
 
@@ -53,7 +76,11 @@ function CreateUpdate({
                 </div>
 
                 <div className="col">
-                  <Dropdown data={bType}></Dropdown>
+                  <Dropdown
+                    id="types"
+                    data={bType}
+                    dValue={fieldData.type}
+                  ></Dropdown>
                 </div>
               </div>
 
@@ -62,7 +89,26 @@ function CreateUpdate({
                   <label className="form-label">Booking Status:</label>
                 </div>
                 <div className="col">
-                  <Dropdown data={statuses}></Dropdown>
+                  <Dropdown
+                    id="stats"
+                    data={statuses}
+                    dValue={fieldData.status}
+                  ></Dropdown>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col">
+                  <label className="form-label">Appointment date:</label>
+                </div>
+
+                <div className="col">
+                  <input
+                    id="appointmentDate"
+                    className="form-control"
+                    type="date"
+                    defaultValue={fieldData.date}
+                  />
                 </div>
               </div>
 
@@ -116,11 +162,12 @@ function CreateUpdate({
               <div className="d-flex flex-row-reverse p-3">
                 <div>
                   <Button
-                    onClick={() =>
+                    onClick={() => (
+                      createUpdate(page, fieldData.uid),
                       moveToBooking(bookingsView, updateCreateView)
-                    }
+                    )}
                   >
-                    Create
+                    {page}
                   </Button>
                 </div>
 
@@ -141,6 +188,116 @@ function CreateUpdate({
       </div>
     </div>
   );
+}
+
+function createUpdate(page, uid) {
+  const btype = document.getElementById("types").value;
+  const stats = document.getElementById("stats").value;
+  const start = document.getElementById("appointmentTime").value;
+  const duration = document.getElementById("duration").value;
+  const patient = document.getElementById("patient").value;
+  const reason = document.getElementById("reason").value;
+  const date = document.getElementById("appointmentDate").value;
+
+  let newDate = date + "T" + start;
+
+  if (page == "Update") {
+    update(uid, newDate, duration, patient, reason);
+  } else if (page == "Create new") {
+    create(btype, stats, newDate, duration, patient, reason);
+  }
+}
+
+function update(uid, newDate, duration, patient, reason) {
+  let body =
+    '{"model":{"uid":"' +
+    uid +
+    '","start_time":"' +
+    newDate +
+    '","duration":"' +
+    duration +
+    '","patient_uid":"' +
+    patient +
+    '","reason":"' +
+    reason +
+    '","cancelled":false}}';
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function () {
+    let objData = JSON.parse(this.responseText);
+    if (objData.status == "OK") {
+      window.alert("Successfully created new booking");
+    } else {
+      window.alert("Something went wront.\n" + JSON.stringify(objData));
+    }
+  };
+
+  xhttp.open("PUT", apiurl + "/api/booking/" + uid);
+
+  xhttp.send(body);
+}
+
+function create(btype, stats, start, duration, patient, reason) {
+  //Creating body for the request
+  let body =
+    '{"model":{"entity_uid": "' +
+    sessionStorage.getItem("entity_uid") +
+    '","diary_uid": "' +
+    sessionStorage.getItem("diary_uid") +
+    '","booking_type_uid": "';
+
+  body =
+    body +
+    btype +
+    '","booking_status_uid": "' +
+    stats +
+    '","start_time": "' +
+    start +
+    '","duration": "' +
+    duration +
+    '", "patient_uid": "' +
+    patient +
+    '","reason": "' +
+    reason +
+    '", "cancelled": false }}';
+  //console.log(body);
+  sendRequest(body);
+}
+
+function sendRequest(body) {
+  const xhttp = new XMLHttpRequest();
+  xhttp.onload = function () {
+    let objData = JSON.parse(this.responseText);
+    if (objData.status === "OK") {
+      window.alert("New Booking created successfully");
+    } else {
+      window.alert("Something went wrong: (" + JSON.stringify(objData) + ")");
+    }
+  };
+  xhttp.open("Get", apiurl + "/api/booking");
+  xhttp.send(body);
+}
+
+function deleteBooking(uid, bookingsView, updateCreateView) {
+  let text =
+    "You are about to delete the booking.\nAre you sure you want to do that?";
+  if (window.confirm(text)) {
+    const xhttp = new XMLHttpRequest();
+    const body = '{"model":{"uid":"' + uid + '","cancelled":true}}';
+    xhttp.onload = function () {
+      const data = JSON.parse(this.responseText);
+      if ((data.status = "OK")) {
+        window.alert("Booking deleted successfully");
+        bookingsView(true);
+        updateCreateView(false);
+      } else {
+        window.alert(
+          "Something unexpected happened: \n" + JSON.stringify(data)
+        );
+      }
+    };
+    xhttp.open("PUT", apiurl + "/api/booking/" + uid);
+    xhttp.send(body);
+  }
 }
 
 function moveToBooking(bookingsView, updateCreateView) {

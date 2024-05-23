@@ -99,10 +99,6 @@ function Bookings({
   );
 }
 
-function dates(e, changeToday) {
-  console.log(e);
-}
-
 function moveToCreate(bookingsView, updateCreateView, updatePage, page) {
   updatePage(page);
   bookingsView(false);
@@ -141,6 +137,7 @@ function filterout(testDate, obj) {
         temp = temp + ";";
         temp = temp + obj.data[k].debtor_uid; //[10]
         temp = temp + ";";
+        temp = temp + obj.data[k].start_time.substring(0, 10);
         r[count] = temp;
         count += 1;
       }

@@ -143,6 +143,9 @@ function validate(
 }
 
 function getDiary(demoAlert) {
+  const obj = JSON.parse(
+    '{"status":"OK","data":[{"uid":3,"entity_uid":3,"treating_doctor_uid":5,"service_center_uid":9824,"booking_type_uid":null,"name":"GP_3","uuid":"bbfe4986-6b29-44b1-998d-2737183c2f24","disabled":false}]}'
+  );
   const xhttp = new XMLHttpRequest();
   xhttp.onload = function () {
     //alert('got response');
@@ -151,6 +154,11 @@ function getDiary(demoAlert) {
       demoAlert(
         "Please Note: Response from server is: 'SESSION_INVALID:NOEXIST'. For demo purposes we'll be using static values to at least demo the website"
       );
+      sessionStorage.setItem("diary_uid", obj.data[0].uid);
+      sessionStorage.setItem("entity_uid", obj.data[0].entity_uid);
+    } else if (objData.status == "OK") {
+      sessionStorage.setItem("diary_uid", objData.data[0].uid);
+      sessionStorage.setItem("entity_uid", objData.data[0].entity_uid);
     }
   };
 
