@@ -24,8 +24,8 @@ function Login({
   setbTypes,
 }: LoginProps) {
   const [alertVisible, setAlertVisible] = useState(false);
-  const [name, setName] = useState("applicant_003");
-  const [pass, setPass] = useState("appli_3");
+  const [name, setName] = useState("");
+  const [pass, setPass] = useState("");
   return (
     <div className="container">
       <div className="row vh-100 align-items-center justify-content-center">
@@ -115,7 +115,7 @@ function validate(
       let temp =
         'session_id="\\"' + objData.data.uid + '\\"_applicant_003";Path=/;';
       sessionStorage.setItem("jank", temp);
-      // document.cookie = sessionStorage.getItem("jank");
+      document.cookie = sessionStorage.getItem("jank");
       getDiary(demoAlert);
       getStatus(settingStatus);
       getPatients(settingPatients);
