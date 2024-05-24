@@ -9,8 +9,8 @@ interface DropdownProps {
 function Dropdown({ data, dValue, idName, id }: DropdownProps) {
   let obj = JSON.parse(data);
   return (
-    <select id={id} class="form-select" value={dValue}>
-      <option value="none" selected disabled hidden>
+    <select id={id} class="form-select" defaultValue={dValue}>
+      <option selected disabled hidden value="">
         Select an Option
       </option>
       {obj.map((item) => (

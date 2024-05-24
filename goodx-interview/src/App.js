@@ -82,7 +82,7 @@ function App() {
     setDateBookings(val);
   }
 
-  //function to use states in children
+  //function to use a date picker
 
   let t = new Date();
   let month = t.getMonth() + 1;
@@ -121,12 +121,13 @@ function App() {
           <Bookings
             bookingsView={bookingsView}
             updateCreateView={updateCreateView}
-            dateCheck={"2024-05-19"}
+            dateCheck={today}
             updatePage={updatePage}
             updatePreFilled={updatePreFilled}
             demoAlert={demoAlert}
             seeMyBookings={seeMyBookings}
             data={seeDateBookings}
+            changeToday={changeToday}
           />
         )}
       </div>

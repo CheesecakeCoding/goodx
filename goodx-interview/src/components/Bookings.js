@@ -25,6 +25,7 @@ function Bookings({
   changeToday,
 }: BookingsProps) {
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [displayCalendar, setCalendar] = useState(false);
   //const [bookingData, setBookingData] = useState("{}");
   //getData(setBookingData, demoAlert);
 
@@ -42,6 +43,33 @@ function Bookings({
               <div className="row">
                 <div>
                   <h1>Bookings for {dateCheck}</h1>
+                </div>
+                <div className="d-flex flex-row-reverse p-2">
+                  {displayCalendar ? (
+                    <>
+                      <input
+                        type="date"
+                        id="Calendar"
+                        placeholder="yyyy-mm-dd"
+                      ></input>
+                      <Button
+                        size="btn-sm"
+                        onClick={() => (
+                          changeDate(changeToday, dateCheck), setCalendar(false)
+                        )}
+                      >
+                        Change
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      size="btn-sm"
+                      color="outline-secondary"
+                      onClick={() => setCalendar(true)}
+                    >
+                      Change Date
+                    </Button>
+                  )}
                 </div>
               </div>
               <hr />
@@ -149,6 +177,13 @@ function filterout(testDate, obj) {
 
 function getDataToChange(updatePreFilled) {
   console.log("This:" + " " + this);
+}
+
+function changeDate(changeToday, dateCheck) {
+  try {
+    const newDate = document.getElementById("Calendar").value;
+    changeToday(newDate);
+  } catch {}
 }
 
 export default Bookings;
