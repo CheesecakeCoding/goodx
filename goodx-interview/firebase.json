@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/goodx-interview",
+    "public": "goodx-interview",
     "ignore": [
       "firebase.json",
       "**/.*",
